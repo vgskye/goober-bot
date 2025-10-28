@@ -10,4 +10,8 @@ poise_error.workspace = true
 postcard.workspace = true
 serde.workspace = true
 sled.workspace = true
+topgg.optional = true
 topgg.workspace = true
+
+[features]
+topgg = ["dep:topgg"]

@@ -15,10 +15,14 @@ poise_error.workspace = true
 postcard.workspace = true
 shared.workspace = true
 sled.workspace = true
+topgg.optional = true
 topgg.workspace = true
 tokio.workspace = true
 tracing-subscriber.workspace = true
 tracing.workspace = true
+
+[features]
+topgg = ["dep:topgg", "shared/topgg"]
 
 # Ensures that poise_error uses the same version of poise
 [patch.crates-io]

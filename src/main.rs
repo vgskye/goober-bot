@@ -62,22 +62,20 @@ async fn main() -> Result<(), poise_error::anyhow::Error> {
         .without_time()
         .init();
 
-    let db = sled::open(std::env::var("DB_PATH")
-        .context("`DB_PATH` was not found")?)?;
-    #[cfg(not(debug_assertions))]
+    let db = sled::open(std::env::var("DB_PATH").context("`DB_PATH` was not found")?)?;
+    #[cfg(feature = "topgg")]
     let topgg_client = {
-        let topgg_token = std::env::var("TOPGG_TOKEN")
-            .context("`TOPGG_TOKEN` was not found")?;
+        let topgg_token = std::env::var("TOPGG_TOKEN").context("`TOPGG_TOKEN` was not found")?;
 
         topgg::Client::new(topgg_token)
     };
     let client_builder = {
-        let discord_token = std::env::var("DISCORD_TOKEN")
-            .context("`DISCORD_TOKEN` was not found")?;
+        let discord_token =
+            std::env::var("DISCORD_TOKEN").context("`DISCORD_TOKEN` was not found")?;
 
         ClientBuilder::new(discord_token, GatewayIntents::GUILDS)
     };
-    #[cfg(not(debug_assertions))]
+    #[cfg(feature = "topgg")]
     let autoposter = {
         use std::time::Duration;
 
@@ -87,7 +85,7 @@ async fn main() -> Result<(), poise_error::anyhow::Error> {
 
         Autoposter::serenity(&topgg_client, Duration::from_secs(1800))
     };
-    #[cfg(not(debug_assertions))]
+    #[cfg(feature = "topgg")]
     let client_builder = client_builder.event_handler_arc(autoposter.handler());
     let mut commands = vec![
         analytics(),
@@ -116,7 +114,7 @@ async fn main() -> Result<(), poise_error::anyhow::Error> {
         commands::tickle(),
         commands::timestamp(),
         commands::updates(),
-        #[cfg(not(debug_assertions))]
+        #[cfg(feature = "topgg")]
         commands::vote(),
         config(),
     ];
@@ -165,9 +163,9 @@ async fn main() -> Result<(), poise_error::anyhow::Error> {
 
                 Ok(Data {
                     db,
-                    #[cfg(not(debug_assertions))]
+                    #[cfg(feature = "topgg")]
                     topgg_client,
-                    #[cfg(not(debug_assertions))]
+                    #[cfg(feature = "topgg")]
                     _autoposter: autoposter,
                 })
             })

@@ -12,5 +12,9 @@ command_silly.workspace = true
 command_strike.workspace = true
 command_timestamp.workspace = true
 command_updates.workspace = true
+command_vote.optional = true
 command_vote.workspace = true
 commands_shared.workspace = true
+
+[features]
+topgg = ["dep:command_vote"]

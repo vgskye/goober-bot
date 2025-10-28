@@ -1,20 +1,24 @@
 use sled::Db;
-#[cfg(not(debug_assertions))]
+#[cfg(feature = "topgg")]
 use topgg::{Autoposter, autoposter::Serenity};
 
 /// User data, which is stored and accessible in all command invocations
 pub struct Data {
     pub db: Db,
-    #[cfg(not(debug_assertions))]
+    #[cfg(feature = "topgg")]
     pub topgg_client: topgg::Client,
     // The autoposter is moved here so that it is not dropped, which would stop
     // its thread.
-    #[cfg(not(debug_assertions))]
+    #[cfg(feature = "topgg")]
     pub _autoposter: Autoposter<Serenity>,
 }
 
 impl Data {
-    pub fn write_serialized(&self, key: &str, data: &impl serde::Serialize) -> Result<(), poise_error::anyhow::Error> {
+    pub fn write_serialized(
+        &self,
+        key: &str,
+        data: &impl serde::Serialize,
+    ) -> Result<(), poise_error::anyhow::Error> {
         self.db.insert(key, postcard::to_stdvec(data)?)?;
         Ok(())
     }

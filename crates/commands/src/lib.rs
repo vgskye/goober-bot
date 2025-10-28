@@ -21,6 +21,6 @@ pub use command_silly::*;
 pub use command_strike::*;
 pub use command_timestamp::*;
 pub use command_updates::*;
-#[cfg(not(debug_assertions))]
+#[cfg(feature = "topgg")]
 pub use command_vote::*;
 pub use commands_shared::*;
