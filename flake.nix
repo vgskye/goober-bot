@@ -1,66 +1,98 @@
 {
   inputs.nixpkgs.url = "nixpkgs";
 
-  outputs = {
-    self,
-    nixpkgs,
-    ...
-  }: let
-    version = builtins.substring 0 7 self.lastModifiedDate;
+  outputs =
+    {
+      self,
+      nixpkgs,
+      ...
+    }:
+    let
+      version = self.shortRev or self.dirtyShortRev;
 
-    systems = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
 
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-    nixpkgsFor = forAllSystems (system: import nixpkgs {inherit system;});
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+      nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; });
 
-    packageFn = pkgs:
-      pkgs.rustPlatform.buildRustPackage {
-        pname = "goober-bot";
-        inherit version;
+      packageFn =
+        pkgs:
+        pkgs.rustPlatform.buildRustPackage {
+          pname = "goober-bot";
+          inherit version;
 
-        nativeBuildInputs = with pkgs; [
-          pkg-config
-        ];
+          nativeBuildInputs = with pkgs; [
+            pkg-config
+          ];
 
-        buildInputs = with pkgs; [
-          openssl
-          git
-        ];
+          buildInputs = with pkgs; [
+            openssl
+            git
+          ];
 
-        src = builtins.path {
-          name = "source";
-          path = ./.;
+          src = builtins.path {
+            name = "source";
+            path = ./.;
+          };
+
+          fetchCargoVendor = true;
+          cargoHash = "sha256-y/rRIZzz6bO7pY5IlI/p6x1TzJ0eaL3xJmxDYXxhlec=";
+
+          separateDebugInfo = true;
         };
+    in
+    {
+      packages = forAllSystems (
+        s:
+        let
+          pkgs = nixpkgsFor.${s};
+        in
+        rec {
+          goober-bot = packageFn pkgs;
+          default = goober-bot;
+        }
+      );
 
-        fetchCargoVendor = true;
-        cargoHash = "sha256-y/rRIZzz6bO7pY5IlI/p6x1TzJ0eaL3xJmxDYXxhlec=";
+      devShells = forAllSystems (
+        s:
+        let
+          pkgs = nixpkgsFor.${s};
+          inherit (pkgs) mkShell;
+        in
+        {
+          default = mkShell {
+            packages = with pkgs; [
+              pkg-config
+              openssl
+              git
+            ];
+          };
+        }
+      );
 
-        separateDebugInfo = true;
-      };
-  in {
-    packages = forAllSystems (s: let
-      pkgs = nixpkgsFor.${s};
-    in rec {
-      goober-bot = packageFn pkgs;
-      default = goober-bot;
-    });
+      dockerImage = forAllSystems (
+        s:
+        let
+          pkgs = nixpkgsFor.${s};
+        in
+        pkgs.dockerTools.buildImage {
+          name = "goober-bot";
+          tag = "latest";
 
-    devShells = forAllSystems (s: let
-      pkgs = nixpkgsFor.${s};
-      inherit (pkgs) mkShell;
-    in {
-      default = mkShell {
-        packages = with pkgs; [
-          pkg-config
-          openssl
-          git
-        ];
-      };
-    });
-  };
+          config = {
+            Cmd = [ "${self.packages.${s}.goober-bot}/bin/goober-bot" ];
+            Env = [ "DB_PATH=/db" ];
+            WorkingDir = "/db";
+            Volumes = {
+              "/db" = { };
+            };
+          };
+        }
+      );
+    };
 }
