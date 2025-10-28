@@ -85,7 +85,7 @@
           tag = "latest";
 
           config = {
-            Cmd = [ "${self.packages.${s}.goober-bot}/bin/goober-bot" ];
+            Cmd = [ "${self.packages.${s}.goober-bot}/bin/goober_bot" ];
             Env = [ "DB_PATH=/db" ];
             WorkingDir = "/db";
             Volumes = {
