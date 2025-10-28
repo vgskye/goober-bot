@@ -6,7 +6,7 @@ publish.workspace = true
 
 [dependencies]
 poise.workspace = true
+postcard.workspace = true
 rand.workspace = true
-serde_json.workspace = true
 tokio.workspace = true
 tracing.workspace = true

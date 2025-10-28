@@ -227,10 +227,7 @@ async fn give(
     };
 
     strikes.push(strike.clone());
-    ctx.data()
-        .op
-        .write_serialized(strikes_key, &strikes)
-        .await?;
+    ctx.data().write_serialized(strikes_key, &strikes)?;
 
     let allowed_mentions = CreateAllowedMentions::new();
 
@@ -378,10 +375,7 @@ async fn repeal(
     }
 
     *repealer = Some(ctx.author().id);
-    ctx.data()
-        .op
-        .write_serialized(strikes_key, &strikes)
-        .await?;
+    ctx.data().write_serialized(strikes_key, &strikes)?;
 
     let allowed_mentions = CreateAllowedMentions::new();
 

@@ -168,7 +168,7 @@ macro_rules! config {
                     let mut config: Config = read_or_write_default(ctx, &config_key).await?;
 
                     config.$name = value;
-                    ctx.data().op.write_serialized(&config_key, &config).await?;
+                    ctx.data().write_serialized(&config_key, &config)?;
                     ctx.say(format!(
                         "**{}** has been set to **{}** {FLOOF_HAPPY}",
                         $title,

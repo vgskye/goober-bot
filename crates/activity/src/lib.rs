@@ -75,9 +75,9 @@ pub fn start_activity_loop(ctx: serenity_prelude::Context) {
             // FIXME: This is ridiculous, too much for so little.
             //        Fix this after the PR for Serenity is merged.
             if let Some(last_activity) = last_activity {
-                if serde_json::to_string(chosen_activity)
+                if postcard::to_stdvec(chosen_activity)
                     .expect("activities should not fail to serialize")
-                    == serde_json::to_string(last_activity)
+                    == postcard::to_stdvec(last_activity)
                         .expect("activities should not fail to serialize")
                 {
                     continue;

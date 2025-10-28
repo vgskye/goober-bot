@@ -12,3 +12,8 @@
 .shuttle*/
 Secrets*.toml
 .DS_Store
+
+.direnv
+.envrc
+.zed
+bot_db

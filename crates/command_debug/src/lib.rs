@@ -65,7 +65,7 @@ async fn error(
     ephemeral
 )]
 async fn delete_config(ctx: Context<'_>) -> Result<(), poise_error::anyhow::Error> {
-    ctx.data().op.0.delete(&get_config_key(ctx)?).await?;
+    ctx.data().delete(&get_config_key(ctx)?)?;
     ctx.say(format!("Server config file deleted {FLOOF_MUG}"))
         .await?;
 

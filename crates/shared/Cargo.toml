@@ -7,5 +7,7 @@ publish.workspace = true
 [dependencies]
 poise.workspace = true
 poise_error.workspace = true
-shuttle-shared-db.workspace = true
+postcard.workspace = true
+serde.workspace = true
+sled.workspace = true
 topgg.workspace = true

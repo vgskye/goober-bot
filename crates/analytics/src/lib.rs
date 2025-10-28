@@ -50,7 +50,7 @@ async fn load(ctx: Context<'_>) -> Result<Analytics, poise_error::anyhow::Error>
             .retain(|date_time| Utc::now().signed_duration_since(date_time) <= TimeDelta::days(1));
     }
 
-    ctx.data().op.write_serialized(KEY, &analytics).await?;
+    ctx.data().write_serialized(KEY, &analytics)?;
 
     Ok(analytics)
 }
@@ -66,7 +66,7 @@ pub async fn increment(ctx: Context<'_>) -> Result<(), poise_error::anyhow::Erro
     let invocations = analytics.entry(root_command).or_default();
 
     invocations.push(Utc::now());
-    ctx.data().op.write_serialized(KEY, &analytics).await?;
+    ctx.data().write_serialized(KEY, &analytics)?;
 
     Ok(())
 }

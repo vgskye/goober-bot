@@ -31,16 +31,10 @@ use poise::{
 };
 use poise_error::{anyhow::Context as _, on_error};
 use shared::Data;
-use shuttle_runtime::{CustomError, SecretStore};
-use shuttle_serenity::ShuttleSerenity;
-use shuttle_shared_db::SerdeJsonOperator;
 use tracing::{error, info};
 
-#[shuttle_runtime::main]
-async fn main(
-    #[shuttle_runtime::Secrets] secret_store: SecretStore,
-    #[shuttle_shared_db::Postgres] op: SerdeJsonOperator,
-) -> ShuttleSerenity {
+#[tokio::main]
+async fn main() -> Result<(), poise_error::anyhow::Error> {
     tracing_subscriber::fmt()
         // If making a new crate, make sure to add it here.
         .with_env_filter(
@@ -68,17 +62,17 @@ async fn main(
         .without_time()
         .init();
 
+    let db = sled::open(std::env::var("DB_PATH")
+        .context("`DB_PATH` was not found")?)?;
     #[cfg(not(debug_assertions))]
     let topgg_client = {
-        let topgg_token = secret_store
-            .get("TOPGG_TOKEN")
+        let topgg_token = std::env::var("TOPGG_TOKEN")
             .context("`TOPGG_TOKEN` was not found")?;
 
         topgg::Client::new(topgg_token)
     };
     let client_builder = {
-        let discord_token = secret_store
-            .get("DISCORD_TOKEN")
+        let discord_token = std::env::var("DISCORD_TOKEN")
             .context("`DISCORD_TOKEN` was not found")?;
 
         ClientBuilder::new(discord_token, GatewayIntents::GUILDS)
@@ -170,7 +164,7 @@ async fn main(
                 info!("Commands registered");
 
                 Ok(Data {
-                    op,
+                    db,
                     #[cfg(not(debug_assertions))]
                     topgg_client,
                     #[cfg(not(debug_assertions))]
@@ -180,7 +174,7 @@ async fn main(
         })
         .build();
     let client_builder = client_builder.framework(framework);
-    let client = client_builder.await.map_err(CustomError::new)?;
-
-    Ok(client.into())
+    let mut client = client_builder.await?;
+    client.start_autosharded().await?;
+    Ok(())
 }

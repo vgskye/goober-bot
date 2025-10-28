@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use command_updates_proc_macro::commits_string;
+// use command_updates_proc_macro::commits_string;
 use poise::{
     CreateReply, command,
     serenity_prelude::{Color, CreateEmbed},
@@ -35,8 +35,8 @@ pub async fn updates(ctx: Context<'_>) -> Result<(), poise_error::anyhow::Error>
             CreateEmbed::new()
                 .title("Updates")
                 .description(format!(
-                    "{}\n. . .\n\nSee the [GitHub repository](https://github.com/valentinegb/goober-bot/commits/v1/) for more!",
-                    commits_string!(),
+                    "{}\n. . .\n\nSee the [GitHub repository](https://github.com/vgskye/goober-bot/commits/v1/) for more!",
+                    "Changelogs are broken for now, sorry!"// commits_string!(),
                 ))
                 .color(Color::BLUE),
         ),
