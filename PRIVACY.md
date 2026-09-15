@@ -55,7 +55,6 @@ required.
 ## 8. Contact Information
 
 - For any questions or concerns regarding this privacy policy, users can contact
-  Valentine Briese via:
-  - **Email:** valentinegb@icloud.com
-  - **Discord:** Username "valentinegb" or through the official bot Discord
-    server
+  Skye via:
+  - **Email:** skye@is-quite.gay
+  - **Discord:** Username "skyevg"
