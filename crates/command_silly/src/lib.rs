@@ -168,7 +168,7 @@ silly_command! {
     /// You know what you are
     fn meow("Get their attention") {
         bot_message = "Hm? What's that {author}? Oh I see... mhm... okay, okay, I understand {FLOOF_CAT}";
-        author_message = "{author} is meowing at themselves lol, schizophrenic cat {FLOOF_CAT}";
+        author_message = "{author} is meowing at themselves lol, silly cat {FLOOF_CAT}";
         messages = [
             "Uhh, {author} just meowed at {user} {FLOOF_WHAT}",
             "{author} is a furry and they want {user} to know it {FLOOF_MISCHIEF}",
