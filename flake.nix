@@ -44,7 +44,7 @@
           };
 
           fetchCargoVendor = true;
-          cargoHash = "sha256-y/rRIZzz6bO7pY5IlI/p6x1TzJ0eaL3xJmxDYXxhlec=";
+          cargoHash = "sha256-oA0tuaUyNloI6bZRO23TfGaIpPb1D3O2nHgIJYWcpaU=";
 
           separateDebugInfo = true;
         };
