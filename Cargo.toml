@@ -43,6 +43,7 @@ activity = { path = "crates/activity" }
 analytics = { path = "crates/analytics" }
 command_anon = { path = "crates/command_anon" }
 command_debug = { path = "crates/command_debug" }
+command_isprime = { path = "crates/command_isprime" }
 command_rock_paper_scissors = { path = "crates/command_rock_paper_scissors" }
 command_silly = { path = "crates/command_silly" }
 command_strike = { path = "crates/command_strike" }

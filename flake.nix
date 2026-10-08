@@ -33,6 +33,9 @@
           buildInputs = with pkgs; [
             openssl
             git
+            gmp
+            mpfr
+            libmpc
           ];
 
           src = builtins.path {
@@ -70,6 +73,9 @@
               pkg-config
               openssl
               git
+              gmp
+              mpfr
+              libmpc
             ];
           };
         }

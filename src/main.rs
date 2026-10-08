@@ -43,6 +43,7 @@ async fn main() -> Result<(), poise_error::anyhow::Error> {
             analytics=debug,\
             command_anon=debug,\
             command_debug=debug,\
+            command_isprime=debug,\
             command_rock_paper_scissors=debug,\
             command_silly=debug,\
             command_strike=debug,\
@@ -101,6 +102,7 @@ async fn main() -> Result<(), poise_error::anyhow::Error> {
         commands::gnaw(),
         commands::hamburger(),
         commands::hug(),
+        commands::isprime(),
         commands::jumpscare(),
         commands::kiss(),
         commands::meow(),

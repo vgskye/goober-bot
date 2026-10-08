@@ -16,6 +16,7 @@
 
 pub use command_anon::*;
 pub use command_debug::*;
+pub use command_isprime::*;
 pub use command_rock_paper_scissors::*;
 pub use command_silly::*;
 pub use command_strike::*;
