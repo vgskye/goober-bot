@@ -40,11 +40,23 @@ pub async fn isprime(
         return Ok(());
     };
     let number = number.complete();
+    if number.is_negative() {
+        ctx.say(format!("That's a negative number... {FLOOF_WHAT}")).await?;
+        return Ok(());
+    }
+    if number == Integer::from(0) {
+        ctx.say(format!("Zero is neither prime nor composite! {FLOOF}")).await?;
+        return Ok(());
+    }
+    if number == Integer::from(1) {
+        ctx.say(format!("One is neither prime nor composite! {FLOOF}")).await?;
+        return Ok(());
+    }
     ctx.defer().await?;
     match spawn_blocking(move || number.is_probably_prime(50)).await? {
         IsPrime::No => ctx.say(format!("That number... is composite! {FLOOF}")).await?,
-        IsPrime::Probably => ctx.say(format!("I'm not 100% sure, but I think this might be a prime number! {FLOOF}")).await?,
-        IsPrime::Yes => ctx.say(format!("This is a prime number! {FLOOF}")).await?,
+        IsPrime::Probably => ctx.say(format!("I'm 99.99999999999998% sure this is a prime number! {FLOOF}")).await?,
+        IsPrime::Yes => ctx.say(format!("That is a prime number! {FLOOF}")).await?,
     };
     Ok(())
 }
